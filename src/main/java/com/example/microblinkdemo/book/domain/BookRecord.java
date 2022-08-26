@@ -1,6 +1,6 @@
-package com.example.microblinkdemo.book;
+package com.example.microblinkdemo.book.domain;
 
-import com.example.microblinkdemo.userbookrecord.UserBookRecord;
+import com.example.microblinkdemo.userbookrecord.domain.UserBookRecord;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,7 @@ public class BookRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)

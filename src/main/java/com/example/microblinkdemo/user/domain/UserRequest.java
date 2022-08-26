@@ -7,12 +7,14 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Getter
-public abstract class AbstractUser {
+public class UserRequest {
 
     @NotBlank
     private String firstName;
+
     @NotBlank
     private String lastName;
+
     @Past
     private LocalDate dateOfBirth;
 }

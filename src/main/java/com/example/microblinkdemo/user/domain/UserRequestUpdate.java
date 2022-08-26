@@ -5,7 +5,7 @@ import lombok.Getter;
 import javax.validation.constraints.NotNull;
 
 @Getter
-public class UserRequestUpdate extends AbstractUser {
+public class UserRequestUpdate extends UserRequest {
 
     @NotNull
     private Integer id;

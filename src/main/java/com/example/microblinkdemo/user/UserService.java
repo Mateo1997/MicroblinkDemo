@@ -8,6 +8,8 @@ import com.example.microblinkdemo.util.ResponseConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -40,6 +42,7 @@ public class UserService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(request.getDateOfBirth())
+                .serialNumber(UUID.randomUUID().toString())
                 .build();
     }
 

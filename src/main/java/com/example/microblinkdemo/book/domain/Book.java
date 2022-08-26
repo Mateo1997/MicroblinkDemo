@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.book;
+package com.example.microblinkdemo.book.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,4 +30,8 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<BookRecord> bookRecords;
+
+    public Book(Integer id) {
+        this.id = id;
+    }
 }

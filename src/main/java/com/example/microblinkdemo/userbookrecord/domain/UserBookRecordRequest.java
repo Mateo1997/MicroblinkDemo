@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.userbookrecord;
+package com.example.microblinkdemo.userbookrecord.domain;
 
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;

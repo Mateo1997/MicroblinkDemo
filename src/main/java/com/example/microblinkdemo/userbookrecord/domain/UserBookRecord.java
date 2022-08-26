@@ -1,6 +1,6 @@
-package com.example.microblinkdemo.userbookrecord;
+package com.example.microblinkdemo.userbookrecord.domain;
 
-import com.example.microblinkdemo.book.BookRecord;
+import com.example.microblinkdemo.book.domain.BookRecord;
 import com.example.microblinkdemo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

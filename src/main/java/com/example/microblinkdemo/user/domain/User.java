@@ -1,6 +1,6 @@
 package com.example.microblinkdemo.user.domain;
 
-import com.example.microblinkdemo.userbookrecord.UserBookRecord;
+import com.example.microblinkdemo.userbookrecord.domain.UserBookRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +21,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String serialNumber;
 
     @Column(nullable = false)
     private String firstName;
