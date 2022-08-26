@@ -21,7 +21,7 @@ public class BookRecord {
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookId")
+    @JoinColumn(name = "bookId", nullable = false)
     private Book book;
 
     @OneToMany(mappedBy = "bookRecord")

@@ -8,15 +8,19 @@ import com.example.microblinkdemo.exception.MethodNotAllowedException;
 import com.example.microblinkdemo.user.UserService;
 import com.example.microblinkdemo.user.domain.User;
 import com.example.microblinkdemo.user.domain.UserDomain;
-import com.example.microblinkdemo.userbookrecord.domain.UserBookRecord;
-import com.example.microblinkdemo.userbookrecord.domain.UserBookRecordHistory;
-import com.example.microblinkdemo.userbookrecord.domain.UserBookRecordRequest;
+import com.example.microblinkdemo.userbookrecord.domain.*;
 import com.example.microblinkdemo.util.ResponseConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +30,34 @@ public class UserBookRecordService {
     private final UserService userService;
     private final BookRecordService bookRecordService;
 
-    public List<UserBookRecordHistory> history(Integer bookId) {
-        final List<UserBookRecord> userBookRecordEntities = userBookRecordRepository.findByBookRecord_BookOrderByBorrowTimeDesc(new Book(bookId));
+    @Value("${library.days.of.keeping.book}")
+    private Integer dayOfKeepingBook;
+
+//    public UserOverdue mostOverdue() {
+//        UserOverdue user = null;
+//        final List<UserBookRecord> mostOverdueUsers = userBookRecordRepository.findMostOverdueUser();
+//
+//        Optional<Map.Entry<User, Long>> mostOverdueUser = mostOverdueUsers.stream()
+//                .collect(Collectors.groupingBy(UserBookRecord::getUser,
+//                        Collectors.summingLong(value -> ChronoUnit.DAYS.between(value.getDueDate(), LocalDate.now()))))
+//                .entrySet().stream().max(Map.Entry.comparingByValue());
+//
+//        if (mostOverdueUser.isPresent()) {
+//            UserDomain userDomain  = mapUserDomain(mostOverdueUser.get().getKey());
+//
+//        }
+//
+//        return user;
+//    }
+
+    public List<UserBookRecordHistory> history(Integer bookRecordId) {
+        final List<UserBookRecord> userBookRecordEntities = userBookRecordRepository.findByBookRecord_IdOrderByBorrowDateDesc(bookRecordId);
         return userBookRecordEntities.stream()
                 .map(this::mapUserBookRecordHistory)
                 .toList();
     }
 
-    public void borrowBook(UserBookRecordRequest request) {
+    public BookDueDate borrowBook(UserBookRecordRequest request) {
         List<UserBookRecord> userBookRecordEntities = new ArrayList<>();
         userService.throwExceptionIfNotExists(request.getUserId());
 
@@ -43,10 +67,13 @@ public class UserBookRecordService {
             userBookRecordEntities.add(mapUserBookRecord(request, bookRecordId));
         }
         userBookRecordRepository.saveAll(userBookRecordEntities);
+        final LocalDate dueDate = getBookDueDate(request.getBorrowDate());
+        return new BookDueDate(dueDate);
     }
 
+
     private void throwExceptionIfBookIsLend(Integer bookRecordId) {
-        final boolean isBookLend = userBookRecordRepository.existsByBookRecord_IdAndReturnTimeIsNull(bookRecordId);
+        final boolean isBookLend = userBookRecordRepository.existsByBookRecord_IdAndReturnDateIsNull(bookRecordId);
         if (isBookLend)
             throw new MethodNotAllowedException(ResponseConstants.ERROR_BOOK_ALREADY_LEND);
     }
@@ -55,16 +82,22 @@ public class UserBookRecordService {
         return UserBookRecord.builder()
                 .bookRecord(new BookRecord(bookRecordId))
                 .user(new User(request.getUserId()))
-                .borrowTime(request.getBorrowTime())
+                .borrowDate(request.getBorrowDate())
+                .dueDate(getBookDueDate(request.getBorrowDate()))
                 .build();
+    }
+
+    private LocalDate getBookDueDate(LocalDate borrowDate) {
+        return borrowDate.plusDays(dayOfKeepingBook);
     }
 
     private UserBookRecordHistory mapUserBookRecordHistory(UserBookRecord userBookRecord) {
         return UserBookRecordHistory.builder()
                 .book(mapBookDomain(userBookRecord.getBookRecord()))
                 .user(mapUserDomain(userBookRecord.getUser()))
-                .borrowTime(userBookRecord.getBorrowTime())
-                .returnTime(userBookRecord.getReturnTime())
+                .borrowDate(userBookRecord.getBorrowDate())
+                .dueDate(userBookRecord.getDueDate())
+                .returnDate(userBookRecord.getReturnDate())
                 .build();
     }
 

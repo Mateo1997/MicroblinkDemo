@@ -1,6 +1,7 @@
 package com.example.microblinkdemo.user;
 
 import com.example.microblinkdemo.user.domain.User;
+import com.example.microblinkdemo.user.domain.UserDomain;
 import com.example.microblinkdemo.user.domain.UserRequestCreate;
 import com.example.microblinkdemo.user.domain.UserRequestUpdate;
 import com.example.microblinkdemo.util.Validator;
@@ -17,9 +18,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}")
     public User findById(@PathVariable Integer id) {
         return userService.findById(id);
+    }
+
+    @GetMapping(value = "/most-overdue")
+    public UserDomain mostOverdue() {
+        return userService.findMostOverdue();
     }
 
     @PostMapping

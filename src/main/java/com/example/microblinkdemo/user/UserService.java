@@ -2,6 +2,7 @@ package com.example.microblinkdemo.user;
 
 import com.example.microblinkdemo.exception.NotFoundException;
 import com.example.microblinkdemo.user.domain.User;
+import com.example.microblinkdemo.user.domain.UserDomain;
 import com.example.microblinkdemo.user.domain.UserRequestCreate;
 import com.example.microblinkdemo.user.domain.UserRequestUpdate;
 import com.example.microblinkdemo.util.ResponseConstants;
@@ -20,6 +21,15 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException(ResponseConstants.ERROR_USER_NOT_FOUND);
         });
+    }
+
+    public UserDomain findMostOverdue() {
+        UserDomain userDomain = null;
+        final User mostOverdueUser = userRepository.findMostOverdue();
+        if (mostOverdueUser != null)  {
+            userDomain = mapUserDomain(mostOverdueUser);
+        }
+        return userDomain;
     }
 
     public User save(UserRequestCreate request) {
@@ -52,6 +62,16 @@ public class UserService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(request.getDateOfBirth())
+                .build();
+    }
+
+    private UserDomain mapUserDomain(User user) {
+        return UserDomain.builder()
+                .id(user.getId())
+                .serialNumber(user.getSerialNumber())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
 }

@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -17,6 +17,7 @@ public class UserBookRecordHistory {
 
     private UserDomain user;
     private BookDomain book;
-    private LocalDateTime borrowTime;
-    private LocalDateTime returnTime;
+    private LocalDate borrowDate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
 }

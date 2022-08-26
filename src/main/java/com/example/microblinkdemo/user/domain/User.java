@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Table(name = "\"User\"")
+@Table(name = "UserBook")
 @Entity
 @Getter
 @NoArgsConstructor

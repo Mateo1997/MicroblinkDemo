@@ -8,8 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+@Table(name = "UserBookRecord")
 @Entity
 @Getter
 @NoArgsConstructor
@@ -22,9 +23,11 @@ public class UserBookRecord {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime borrowTime;
+    private LocalDate borrowDate;
 
-    private LocalDateTime returnTime;
+    private LocalDate dueDate;
+
+    private LocalDate returnDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookRecordId", nullable = false)
