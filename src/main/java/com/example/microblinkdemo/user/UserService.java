@@ -2,8 +2,8 @@ package com.example.microblinkdemo.user;
 
 import com.example.microblinkdemo.exception.NotFoundException;
 import com.example.microblinkdemo.user.domain.User;
-import com.example.microblinkdemo.user.domain.AbstractUserRequestCreate;
-import com.example.microblinkdemo.user.domain.AbstractUserRequestUpdate;
+import com.example.microblinkdemo.user.domain.UserRequestCreate;
+import com.example.microblinkdemo.user.domain.UserRequestUpdate;
 import com.example.microblinkdemo.util.ResponseConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,20 +20,22 @@ public class UserService {
         });
     }
 
-    public User save(AbstractUserRequestCreate request) {
+    public User save(UserRequestCreate request) {
         return userRepository.save(mapCreateRequestToEntity(request));
     }
 
-    public void update(AbstractUserRequestUpdate request) {
-        final boolean doesUserExists = userRepository.existsById(request.getId());
-        if (!doesUserExists)
-            throw new NotFoundException(ResponseConstants.ERROR_USER_NOT_FOUND);
-
+    public void update(UserRequestUpdate request) {
+        throwExceptionIfNotExists(request.getId());
         userRepository.save(mapUpdateRequestToEntity(request));
     }
 
+    public void throwExceptionIfNotExists(Integer userId) {
+        final boolean userExists = userRepository.existsById(userId);
+        if (!userExists)
+            throw new NotFoundException(ResponseConstants.ERROR_USER_NOT_FOUND);
+    }
 
-    private User mapCreateRequestToEntity(AbstractUserRequestCreate request) {
+    private User mapCreateRequestToEntity(UserRequestCreate request) {
         return User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -41,7 +43,7 @@ public class UserService {
                 .build();
     }
 
-    private User mapUpdateRequestToEntity(AbstractUserRequestUpdate request) {
+    private User mapUpdateRequestToEntity(UserRequestUpdate request) {
         return User.builder()
                 .id(request.getId())
                 .firstName(request.getFirstName())

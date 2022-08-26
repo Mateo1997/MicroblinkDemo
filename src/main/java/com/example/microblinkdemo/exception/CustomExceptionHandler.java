@@ -25,6 +25,13 @@ public class CustomExceptionHandler {
         return error(HttpStatus.NOT_FOUND, ex);
     }
 
+    @ExceptionHandler({MethodNotAllowedException.class})
+    public ResponseEntity<ExceptionInformation> handleMethodNotAllowedException(MethodNotAllowedException ex) {
+        log.error("NOT FOUND EXCEPTION: {}", ex.getMessage());
+        log.debug("NOT FOUND EXCEPTION", ex);
+        return error(HttpStatus.METHOD_NOT_ALLOWED, ex);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionInformation> handleRuntimeExceptions(Exception ex) {
         log.debug("EXCEPTION: {}", ex.getMessage());

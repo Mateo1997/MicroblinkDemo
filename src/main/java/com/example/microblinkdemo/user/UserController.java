@@ -1,8 +1,8 @@
 package com.example.microblinkdemo.user;
 
 import com.example.microblinkdemo.user.domain.User;
-import com.example.microblinkdemo.user.domain.AbstractUserRequestCreate;
-import com.example.microblinkdemo.user.domain.AbstractUserRequestUpdate;
+import com.example.microblinkdemo.user.domain.UserRequestCreate;
+import com.example.microblinkdemo.user.domain.UserRequestUpdate;
 import com.example.microblinkdemo.util.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,14 +24,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public User save(@RequestBody @Valid AbstractUserRequestCreate request, BindingResult result) {
+    public User save(@RequestBody @Valid UserRequestCreate request, BindingResult result) {
         Validator.request(result);
         return userService.save(request);
     }
 
     @PutMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody @Valid AbstractUserRequestUpdate request) {
+    public void update(@RequestBody @Valid UserRequestUpdate request) {
         userService.update(request);
     }
 }

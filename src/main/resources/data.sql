@@ -1,0 +1,32 @@
+INSERT INTO book (author, publisher, title, year)
+VALUES ('krleza', 'publisher', 'Ovo je knjiga', 2001),
+       ('krleza2', 'publisher2', 'Ovo je knjiga2', 2002),
+       ('krleza3', 'publisher3', 'Ovo je knjiga3', 2003),
+       ('krleza4', 'publisher4', 'Ovo je knjiga4', 2004),
+       ('krleza5', 'publisher5', 'Ovo je knjiga5', 2005),
+       ('krleza6', 'publisher6', 'Ovo je knjiga6', 2006),
+       ('krleza7', 'publisher7', 'Ovo je knjiga7', 2007);
+
+insert into bookrecord (serialNumber, bookid)
+VALUES (gen_random_uuid(), 1),
+       (gen_random_uuid(), 2),
+       (gen_random_uuid(), 2),
+       (gen_random_uuid(), 3),
+       (gen_random_uuid(), 4),
+       (gen_random_uuid(), 6),
+       (gen_random_uuid(), 7),
+       (gen_random_uuid(), 5),
+       (gen_random_uuid(), 5),
+       (gen_random_uuid(), 1),
+       (gen_random_uuid(), 2),
+       (gen_random_uuid(), 5),
+       (gen_random_uuid(), 4),
+       (gen_random_uuid(), 6),
+       (gen_random_uuid(), 6),
+       (gen_random_uuid(), 7),
+       (gen_random_uuid(), 7),
+       (gen_random_uuid(), 6),
+       (gen_random_uuid(), 2),
+       (gen_random_uuid(), 2),
+       (gen_random_uuid(), 3),
+       (gen_random_uuid(), 4);
