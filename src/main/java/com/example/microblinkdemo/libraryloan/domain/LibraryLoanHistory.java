@@ -1,6 +1,6 @@
-package com.example.microblinkdemo.userbookrecord.domain;
+package com.example.microblinkdemo.libraryloan.domain;
 
-import com.example.microblinkdemo.book.domain.BookDomain;
+import com.example.microblinkdemo.bookcopy.domain.BookCopyDomain;
 import com.example.microblinkdemo.user.domain.UserDomain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserBookRecordHistory {
+public class LibraryLoanHistory {
 
     private UserDomain user;
-    private BookDomain book;
+    private BookCopyDomain bookCopy;
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;

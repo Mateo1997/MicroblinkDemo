@@ -7,7 +7,7 @@ VALUES ('krleza', 'publisher', 'Ovo je knjiga', 2001),
        ('krleza6', 'publisher6', 'Ovo je knjiga6', 2006),
        ('krleza7', 'publisher7', 'Ovo je knjiga7', 2007);
 
-insert into bookrecord (serialNumber, bookid)
+insert into bookcopy (serialNumber, bookid)
 VALUES (gen_random_uuid(), 1),
        (gen_random_uuid(), 2),
        (gen_random_uuid(), 2),

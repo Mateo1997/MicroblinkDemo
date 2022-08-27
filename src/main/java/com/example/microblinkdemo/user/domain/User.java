@@ -1,6 +1,7 @@
 package com.example.microblinkdemo.user.domain;
 
-import com.example.microblinkdemo.userbookrecord.domain.UserBookRecord;
+import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
+import com.example.microblinkdemo.util.TimestampEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +35,8 @@ public class User {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @OneToMany(mappedBy = "bookRecord")
-    private List<UserBookRecord> userBookRecords;
+    @OneToMany(mappedBy = "bookCopy")
+    private List<LibraryLoan> libraryLoans;
 
     public User(Integer id) {
         this.id = id;

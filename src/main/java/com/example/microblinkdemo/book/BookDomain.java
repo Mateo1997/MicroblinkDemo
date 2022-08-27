@@ -1,15 +1,13 @@
-package com.example.microblinkdemo.book.domain;
+package com.example.microblinkdemo.book;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 public class BookDomain {
 
-    private Integer bookRecordId;
     private Integer bookId;
-    private String serialNumber;
     private String title;
     private String author;
     private String publisher;

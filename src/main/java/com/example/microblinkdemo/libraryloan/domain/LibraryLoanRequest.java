@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.userbookrecord.domain;
+package com.example.microblinkdemo.libraryloan.domain;
 
 import lombok.Getter;
 
@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class UserBookRecordRequest {
+public class LibraryLoanRequest {
 
     @NotEmpty
-    private List<Integer> bookRecordIds;
+    private List<Integer> bookCopyIds;
 
     @NotNull
     private Integer userId;

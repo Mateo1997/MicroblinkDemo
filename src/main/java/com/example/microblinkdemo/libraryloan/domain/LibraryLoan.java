@@ -1,6 +1,6 @@
-package com.example.microblinkdemo.userbookrecord.domain;
+package com.example.microblinkdemo.libraryloan.domain;
 
-import com.example.microblinkdemo.book.domain.BookRecord;
+import com.example.microblinkdemo.bookcopy.domain.BookCopy;
 import com.example.microblinkdemo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Table(name = "UserBookRecord")
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserBookRecord {
+public class LibraryLoan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +29,8 @@ public class UserBookRecord {
     private LocalDate returnDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookRecordId", nullable = false)
-    private BookRecord bookRecord;
+    @JoinColumn(name = "bookCopyId", nullable = false)
+    private BookCopy bookCopy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)

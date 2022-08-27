@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.userbookrecord.domain;
+package com.example.microblinkdemo.libraryloan.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

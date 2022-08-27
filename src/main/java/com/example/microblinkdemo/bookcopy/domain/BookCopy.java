@@ -1,17 +1,18 @@
-package com.example.microblinkdemo.book.domain;
+package com.example.microblinkdemo.bookcopy.domain;
 
-import com.example.microblinkdemo.userbookrecord.domain.UserBookRecord;
+import com.example.microblinkdemo.book.Book;
+import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
+import com.example.microblinkdemo.util.TimestampEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
-//@Table(name = "\"BookRecord\"")
 @Entity
 @Getter
 @NoArgsConstructor
-public class BookRecord {
+public class BookCopy extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +25,10 @@ public class BookRecord {
     @JoinColumn(name = "bookId", nullable = false)
     private Book book;
 
-    @OneToMany(mappedBy = "bookRecord")
-    private List<UserBookRecord> userBookRecords;
+    @OneToMany(mappedBy = "bookCopy")
+    private List<LibraryLoan> libraryLoans;
 
-    public BookRecord(Integer id) {
+    public BookCopy(Integer id) {
         this.id = id;
     }
 }
