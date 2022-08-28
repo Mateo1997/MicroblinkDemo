@@ -12,4 +12,15 @@ public class ResponseConstants {
     public static final String ERROR_BOOK_NOT_FOUND = "Book not found";
     public static final String ERROR_BOOK_ALREADY_LEND = "The book has been already lend";
     public static final String ERROR_INTERNAL_SERVER_ERROR = "Internal server error";
+
+    //Microblink exceptions
+    public static final String ERROR_MICROBLINK_SERVICE_UNAVAILABLE = "MICROBLINK_SERVICE_UNAVAILABLE";
+    public static final String ERROR_MICROBLINK_SERVICE_INVALID_RESPONSE = "MICROBLINK_SERVICE_INVALID_RESPONSE";
+
+    public static final String ERROR_MICROBLINK_IMAGE_IS_NOT_VALID = "IMAGE_IS_NOT_VALID";
+    public static final String ERROR_MICROBLINK_IMAGE_IS_NOT_VALID_BASE64_STRING = "IMAGE_IS_NOT_VALID_BASE64_STRING";
+    public static final String ERROR_MICROBLINK_BAD_REQUEST = "BAD_REQUEST";
+    public static final String ERROR_MICROBLINK_SERVER_TOO_BUSY = "SERVER_TOO_BUSY";
+    public static final String ERROR_MICROBLINK_INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
+    public static final String ERROR_MICROBLINK_AUTHORIZATION_HEADER_IS_NOT_VALID = "AUTHORIZATION_HEADER_IS_NOT_VALID";
 }

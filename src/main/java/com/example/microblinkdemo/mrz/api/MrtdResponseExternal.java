@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.mrtd.api;
+package com.example.microblinkdemo.mrz.api;
 
 import lombok.Getter;
 

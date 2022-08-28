@@ -1,11 +1,11 @@
-package com.example.microblinkdemo.mrtd.domain;
+package com.example.microblinkdemo.mrz.domain;
 
-import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
-public class MRTDRequest {
+@Getter
+public class MrtdRequest {
 
     @NotBlank
     private String imageSource;

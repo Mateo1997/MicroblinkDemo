@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.mrtd.domain;
+package com.example.microblinkdemo.mrz.domain;
 
 import com.example.microblinkdemo.util.TimestampEntity;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PersonIdentity extends TimestampEntity {
+public class Mrz extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,10 +1,12 @@
-package com.example.microblinkdemo.mrtd.domain;
+package com.example.microblinkdemo.mrz.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
 public class MrzExtractor {
 
+    @Setter
     private String mrzString;
     private String extractValue;
 

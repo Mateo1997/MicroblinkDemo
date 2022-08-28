@@ -1,11 +1,11 @@
-package com.example.microblinkdemo.mrtd.domain;
+package com.example.microblinkdemo.mrz.domain;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class MrzSecondPartData {
+public class MrzSecondLine {
 
     private String dateOfBirth;
     private String dateOfBirthCD;

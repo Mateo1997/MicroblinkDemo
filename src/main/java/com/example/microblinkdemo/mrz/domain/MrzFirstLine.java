@@ -1,11 +1,11 @@
-package com.example.microblinkdemo.mrtd.domain;
+package com.example.microblinkdemo.mrz.domain;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class MrzFirstPartData {
+public class MrzFirstLine {
 
     private String documentCode;
     private String issuer;

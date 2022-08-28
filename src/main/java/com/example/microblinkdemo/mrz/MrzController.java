@@ -1,6 +1,6 @@
-package com.example.microblinkdemo.mrtd;
+package com.example.microblinkdemo.mrz;
 
-import com.example.microblinkdemo.mrtd.domain.MRTDRequest;
+import com.example.microblinkdemo.mrz.domain.MrtdRequest;
 import com.example.microblinkdemo.util.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RequestMapping("/mrtd")
+@RequestMapping("/mrz")
 @RestController
 @RequiredArgsConstructor
-public class MrtdController {
+public class MrzController {
 
-    private final MrtdService mrtdService;
+    private final MrzService mrzService;
 
     @PostMapping
-    public void process(@RequestBody @Valid MRTDRequest request, BindingResult result) throws Exception {
+    public void parseMrzData(@RequestBody @Valid MrtdRequest request, BindingResult result) {
         Validator.request(result);
-        mrtdService.process(request);
+        mrzService.parseMrzData(request);
     }
 }
