@@ -4,6 +4,10 @@ import java.util.*;
 
 public class Helper {
 
+    private Helper() {
+        throw new IllegalStateException("Helper class");
+    }
+
     public static  <T> Set<T> findDuplicates(Collection<T> collection) {
         Set<T> duplicates = new HashSet<>();
         Set<T> uniques = new HashSet<>();
