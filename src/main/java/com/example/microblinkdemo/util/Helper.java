@@ -1,6 +1,7 @@
 package com.example.microblinkdemo.util;
 
-import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Helper {
 
@@ -8,16 +9,17 @@ public class Helper {
         throw new IllegalStateException("Helper class");
     }
 
-    public static  <T> Set<T> findDuplicates(Collection<T> collection) {
-        Set<T> duplicates = new HashSet<>();
-        Set<T> uniques = new HashSet<>();
-
-        for(T t : collection) {
-            if(!uniques.add(t)) {
-                duplicates.add(t);
+    public static String asJsonString(final Object obj) {
+        try {
+            if (obj != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                return mapper.writeValueAsString(obj);
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-        return duplicates;
+        return null;
     }
 }

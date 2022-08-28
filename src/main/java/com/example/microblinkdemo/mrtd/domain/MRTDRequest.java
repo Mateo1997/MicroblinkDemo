@@ -1,10 +1,10 @@
 package com.example.microblinkdemo.mrtd.domain;
 
-import lombok.Getter;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+@Data
 public class MRTDRequest {
 
     @NotBlank

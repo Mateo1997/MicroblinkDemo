@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MrzData extends TimestampEntity {
+public class PersonIdentity extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

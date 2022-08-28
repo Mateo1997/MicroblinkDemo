@@ -1,16 +1,28 @@
 package com.example.microblinkdemo.mrtd;
 
+import com.example.microblinkdemo.exception.InternalServerError;
+import com.example.microblinkdemo.mrtd.api.MrtdResponseExternal;
 import com.example.microblinkdemo.mrtd.domain.*;
+import com.example.microblinkdemo.util.Helper;
+import com.example.microblinkdemo.util.ResponseConstants;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MrtdService {
 
     private final MrtdRepository mrtdRepository;
@@ -19,31 +31,34 @@ public class MrtdService {
     private final List<Integer> multipliers = List.of(7, 3, 1);
 
     public void process(MRTDRequest request) {
-        String rawMrzString = "IDCYPCR12345673<<<<<<<<<<<<<<<\n9003185M2503181CYP<<<<<<<<<<<4\nSPECIMEN<<SAMPLE<<<<<<<<<<<<<<\n";
-        boolean isMrzValid;
+//        String rawMrzString = "IDCYPCR12345673<<<<<<<<<<<<<<<\n9003185M2503181CYP<<<<<<<<<<<4\nSPECIMEN<<SAMPLE<<<<<<<<<<<<<<\n";
+        try {
+            log.info("REQUEST RECEIVED - process");
+            String rawMrzString = getRawMrzString(request);
 
-        String key = mrzProperties.getApiKey() + ":" + mrzProperties.getApiSecret();
-        String encodedKey = Base64.encodeBase64String(key.getBytes(StandardCharsets.UTF_8));
-        String authorization = "Baerer " + encodedKey;
+            boolean isMrzValid;
+            final String[] mrzArray = splitByNewLine(rawMrzString);
+            final MrzFirstPartData firstPartData = extractMRZFirstPart(mrzArray[0]);
+            final MrzSecondPartData secondPartData = extractMRZSecondPart(mrzArray[1]);
+            final MrzThirdPartData thirdPartData = extractMRZThirdPart(mrzArray[2]);
 
-        final String[] mrzArray = splitByNewLine(rawMrzString);
-        final MrzFirstPartData firstPartData = extractMRZFirstPart(mrzArray[0]);
-        final MrzSecondPartData secondPartData = extractMRZSecondPart(mrzArray[1]);
-        final MrzThirdPartData thirdPartData = extractMRZThirdPart(mrzArray[2]);
+            isMrzValid = isCheckDigitValid(firstPartData.getDocumentNumber(), firstPartData.getDocumentNumberCD()) &&
+                    isCheckDigitValid(secondPartData.getDateOfBirth(), secondPartData.getDateOfBirthCD()) &&
+                    isCheckDigitValid(secondPartData.getDateOfExpiry(), secondPartData.getDateOfExpiryCD());
 
-        isMrzValid = isCheckDigitValid(firstPartData.getDocumentNumber(), firstPartData.getDocumentNumberCD()) &&
-                isCheckDigitValid(secondPartData.getDateOfBirth(), secondPartData.getDateOfBirthCD()) &&
-                isCheckDigitValid(secondPartData.getDateOfExpiry(), secondPartData.getDateOfExpiryCD());
+            if (isMrzValid) {
+                String overallCheck = zeroValueFillers(firstPartData.getDocumentNumber()) + firstPartData.getDocumentNumberCD() + zeroValueFillers(firstPartData.getOptionalData()) +
+                        secondPartData.getDateOfBirth() + secondPartData.getDateOfBirthCD() + secondPartData.getDateOfExpiry() +
+                        secondPartData.getDateOfExpiryCD() + zeroValueFillers(secondPartData.getOptionalData());
+                isMrzValid = isCheckDigitValid(overallCheck, secondPartData.getOverallCD());
+            }
 
-        if (isMrzValid) {
-            String overallCheck = zeroValueFillers(firstPartData.getDocumentNumber()) + firstPartData.getDocumentNumberCD() + zeroValueFillers(firstPartData.getOptionalData()) +
-                    secondPartData.getDateOfBirth() + secondPartData.getDateOfBirthCD() + secondPartData.getDateOfExpiry() +
-                    secondPartData.getDateOfExpiryCD() + zeroValueFillers(secondPartData.getOptionalData());
-            isMrzValid = isCheckDigitValid(overallCheck, secondPartData.getOverallCD());
+            final PersonIdentity personIdentity = mapMrzData(firstPartData, secondPartData, thirdPartData, isMrzValid);
+            mrtdRepository.save(personIdentity);
+        } catch (Exception e) {
+            log.error("REQUEST FAILED - process()", e);
+            throw new InternalServerError(ResponseConstants.ERROR_INTERNAL_SERVER_ERROR);
         }
-
-        final MrzData mrzData = mapMrzData(firstPartData, secondPartData, thirdPartData, isMrzValid);
-//        mrtdRepository.save(mrzData);
     }
 
     private String[] splitByNewLine(String rawMrzString) {
@@ -52,12 +67,6 @@ public class MrtdService {
 
     private MrzFirstPartData extractMRZFirstPart(String mrzFirstPart) {
         MrzExtractor extractor = new MrzExtractor(mrzFirstPart);
-//        final String documentCode = extractPart(mrzFirstPart, 0, mrzProperties.getDocumentCodeSize());
-//        final String issuer = extractPart(mrzFirstPart, 2,  mrzProperties.getIssuerSize());
-//        final String documentNumber = extractPart(mrzFirstPart, 5,  mrzProperties.getDocumentNumberSize());
-//        final String documentNumberCD = extractPart(mrzFirstPart, 14,  mrzProperties.getCheckDigitSize());
-//        final String optionalData = extractPart(mrzFirstPart, 15, null);
-
         final String documentCode = extractPart(extractor,  mrzProperties.getDocumentCodeSize());
         final String issuer = extractPart(extractor,  mrzProperties.getIssuerSize());
         final String documentNumber = extractPart(extractor,  mrzProperties.getDocumentNumberSize());
@@ -76,15 +85,6 @@ public class MrtdService {
 
     private MrzSecondPartData extractMRZSecondPart(String mrzSecondPart) {
         MrzExtractor extractor = new MrzExtractor(mrzSecondPart);
-//        final String dateOfBirth = extractPart(mrzSecondPart, 0,  mrzProperties.getDateOfBirthSize());
-//        final String dateOfBirthCD = extractPart(mrzSecondPart, 6, mrzProperties.getCheckDigitSize());
-//        final String gender = extractPart(mrzSecondPart, 7, mrzProperties.getGenderSize());
-//        final String dateOfExpiry = extractPart(mrzSecondPart, 8, mrzProperties.getDateOfExpirySize());
-//        final String dateOfExpiryCD = extractPart(mrzSecondPart, 14, mrzProperties.getCheckDigitSize());
-//        final String nationality = extractPart(mrzSecondPart, 15, mrzProperties.getNationalitySize());
-//        final String optionalData = extractPart(mrzSecondPart, 18, 11);
-//        final String overallCD = extractPart(mrzSecondPart, 29, mrzProperties.getCheckDigitSize());
-
         final String dateOfBirth = extractPart(extractor,  mrzProperties.getDateOfBirthSize());
         final String dateOfBirthCD = extractPart(extractor, mrzProperties.getCheckDigitSize());
         final String gender = extractPart(extractor, mrzProperties.getGenderSize());
@@ -121,8 +121,8 @@ public class MrtdService {
         return Arrays.stream(identifier.split(MrzCharacters.FILLER)).toList();
     }
 
-    private MrzData mapMrzData(MrzFirstPartData firstPart, MrzSecondPartData secondPart, MrzThirdPartData thirdPart, boolean isMrzValid) {
-        return MrzData.builder()
+    private PersonIdentity mapMrzData(MrzFirstPartData firstPart, MrzSecondPartData secondPart, MrzThirdPartData thirdPart, boolean isMrzValid) {
+        return PersonIdentity.builder()
                 .documentCode(removeFillers(firstPart.getDocumentCode()))
                 .issuer(firstPart.getIssuer())
                 .documentNumber(removeFillers(firstPart.getDocumentNumber()))
@@ -184,7 +184,36 @@ public class MrtdService {
         return text.replace(MrzCharacters.FILLER, MrzCharacters.ZERO);
     }
 
-//    private String extractPart(String rawMrzString, Integer prevIndex, Integer elementSize) {
-//        return rawMrzString.substring(prevIndex, prevIndex + elementSize);
-//    }
+    private String getRawMrzString(MRTDRequest request) throws IOException {
+        final Gson gson = new Gson();
+        String authorization = mrzProperties.getAuthorizationToken();
+        String url = mrzProperties.getMrtdUrl();
+        String requestJson = Helper.asJsonString(request);
+
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
+        con.setRequestProperty(HttpHeaders.ACCEPT, "application/json");
+        con.setRequestProperty(HttpHeaders.AUTHORIZATION, authorization);
+        con.setDoInput(true);
+        con.setDoOutput(true);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = requestJson.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int responseCode = con.getResponseCode();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        MrtdResponseExternal responseExternal = gson.fromJson(response.toString(), MrtdResponseExternal.class);
+        return responseExternal.getResult().getMrzData().getRawMrzString();
+    }
 }
