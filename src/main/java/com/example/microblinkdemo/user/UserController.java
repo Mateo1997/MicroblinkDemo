@@ -23,7 +23,7 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping(value = "/overdue/top")
+    @GetMapping(value = "/most-overdue")
     public UserDomain mostOverdue() {
         return userService.findMostOverdue();
     }

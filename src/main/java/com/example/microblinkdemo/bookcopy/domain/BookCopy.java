@@ -1,8 +1,7 @@
 package com.example.microblinkdemo.bookcopy.domain;
 
 import com.example.microblinkdemo.book.Book;
-import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
-import com.example.microblinkdemo.util.TimestampEntity;
+import com.example.microblinkdemo.libraryloanrecords.LibraryLoanRecord;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class BookCopy extends TimestampEntity {
+public class BookCopy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class BookCopy extends TimestampEntity {
     private Book book;
 
     @OneToMany(mappedBy = "bookCopy")
-    private List<LibraryLoan> libraryLoans;
+    private List<LibraryLoanRecord> libraryLoanRecords;
 
     public BookCopy(Integer id) {
         this.id = id;

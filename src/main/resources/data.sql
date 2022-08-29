@@ -1,13 +1,13 @@
 INSERT INTO book (author, publisher, title, year)
-VALUES ('krleza', 'publisher', 'Ovo je knjiga', 2001),
-       ('krleza2', 'publisher2', 'Ovo je knjiga2', 2002),
-       ('krleza3', 'publisher3', 'Ovo je knjiga3', 2003),
-       ('krleza4', 'publisher4', 'Ovo je knjiga4', 2004),
-       ('krleza5', 'publisher5', 'Ovo je knjiga5', 2005),
-       ('krleza6', 'publisher6', 'Ovo je knjiga6', 2006),
-       ('krleza7', 'publisher7', 'Ovo je knjiga7', 2007);
+VALUES ('John Doe', 'publisher', 'The best book', 2001),
+       ('John Doe2', 'publisher2', 'The best book2', 2002),
+       ('John Doe3', 'publisher3', 'The best book3', 2003),
+       ('John Doe4', 'publisher4', 'The best book4', 2004),
+       ('John Doe2', 'publisher5', 'The best book5', 2005),
+       ('John Doe2', 'publisher6', 'The best book6', 2006),
+       ('John Doe2', 'publisher7', 'The best book7', 2007);
 
-insert into bookcopy (serialNumber, bookid)
+insert into book_copy (serial_number, book_id)
 VALUES (gen_random_uuid(), 1),
        (gen_random_uuid(), 2),
        (gen_random_uuid(), 2),

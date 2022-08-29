@@ -29,16 +29,6 @@ public class Validator {
             throw new BadRequestException(ResponseConstants.ERROR_DUPLICATE_COPY_BOOKS_FOUND + setNumbersToString(duplicates));
     }
 
-    private static <T extends Number> String setNumbersToString(Set<T> numberSet) {
-        StringBuilder sb = new StringBuilder();
-        String delimiter = "";
-        for (T number : numberSet) {
-            sb.append(delimiter).append(number);
-            delimiter = ", ";
-        }
-        return ": (" + sb + ")";
-    }
-
     private static String errorsToString(List<FieldError> errors) {
         StringBuilder sb = new StringBuilder();
         String delimiter = "";
@@ -47,6 +37,16 @@ public class Validator {
             delimiter = ", ";
         }
         return " (" + sb + ")";
+    }
+
+    private static <T extends Number> String setNumbersToString(Set<T> numberSet) {
+        StringBuilder sb = new StringBuilder();
+        String delimiter = "";
+        for (T number : numberSet) {
+            sb.append(delimiter).append(number);
+            delimiter = ", ";
+        }
+        return ": (" + sb + ")";
     }
 
     private static <T> Set<T> findDuplicates(Collection<T> collection) {

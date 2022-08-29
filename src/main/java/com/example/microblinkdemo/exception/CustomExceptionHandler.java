@@ -13,26 +13,39 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<ExceptionInformation> handleBadRequestException(BadRequestException ex) {
-        log.error("BAD REQUEST EXCEPTION", ex);
         return error(HttpStatus.BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler({UnauthorizedException.class})
+    public ResponseEntity<ExceptionInformation> handleUnauthorizedException(UnauthorizedException ex) {
+        return error(HttpStatus.UNAUTHORIZED, ex);
     }
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ExceptionInformation> handleNotFoundException(NotFoundException ex) {
-        log.error("NOT FOUND EXCEPTION: {}", ex.getMessage());
         return error(HttpStatus.NOT_FOUND, ex);
     }
 
     @ExceptionHandler({MethodNotAllowedException.class})
     public ResponseEntity<ExceptionInformation> handleMethodNotAllowedException(MethodNotAllowedException ex) {
-        log.debug("NOT FOUND EXCEPTION", ex);
         return error(HttpStatus.METHOD_NOT_ALLOWED, ex);
+    }
+
+    @ExceptionHandler({InternalServerError.class})
+    public ResponseEntity<ExceptionInformation> handleServiceUnavailableException(InternalServerError ex) {
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+    }
+
+    @ExceptionHandler({ServiceUnavailableException.class})
+    public ResponseEntity<ExceptionInformation> handleServiceUnavailableException(ServiceUnavailableException ex) {
+        return error(HttpStatus.SERVICE_UNAVAILABLE, ex);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionInformation> handleRuntimeExceptions(Exception ex) {
         log.error("EXCEPTION", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionInformation(ResponseConstants.ERROR_INTERNAL_SERVER_ERROR));
     }
 

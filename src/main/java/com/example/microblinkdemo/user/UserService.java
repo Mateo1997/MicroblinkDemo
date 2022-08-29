@@ -34,13 +34,15 @@ public class UserService {
     }
 
     public UserDomain save(UserRequestCreate request) {
-        final User userDTO = userRepository.save(userConverter.createRequestToEntity(request));
+        final User userEntity = userConverter.createRequestToEntity(request);
+        final User userDTO = userRepository.save(userEntity);
         return userConverter.entityToDomain(userDTO);
     }
 
     public void update(UserRequestUpdate request) {
         throwExceptionIfNotExists(request.getId());
-        userRepository.save(userConverter.updateRequestToEntity(request));
+        final User userEntity = userConverter.updateRequestToEntity(request);
+        userRepository.save(userEntity);
     }
 
     public void throwExceptionIfNotExists(Integer userId) {

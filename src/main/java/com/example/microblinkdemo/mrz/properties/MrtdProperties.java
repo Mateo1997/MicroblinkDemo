@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.mrz.domain;
+package com.example.microblinkdemo.mrz.properties;
 
 import lombok.Getter;
 import org.apache.tomcat.util.codec.binary.Base64;

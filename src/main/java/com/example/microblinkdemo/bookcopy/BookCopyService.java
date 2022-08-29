@@ -11,14 +11,10 @@ public class BookCopyService {
 
     private final BookCopyRepository bookCopyRepository;
 
-    public void throwExceptionIfNotExists(Integer bookCopyId) {
-        final boolean bookCopyExists = doesBookCopyExists(bookCopyId);
+    public void throwExceptionIfNotExists(Integer id) {
+        final boolean bookCopyExists = bookCopyRepository.existsById(id);
         if (!bookCopyExists) {
-            throw new NotFoundException(ResponseConstants.ERROR_BOOK_NOT_FOUND);
+            throw new NotFoundException(ResponseConstants.ERROR_BOOK_COPY_NOT_FOUND);
         }
-    }
-
-    private boolean doesBookCopyExists(Integer id) {
-        return bookCopyRepository.existsById(id);
     }
 }

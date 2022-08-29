@@ -25,7 +25,10 @@ public class RetrofitHelper {
         }
 
         if (response.isSuccessful() && response.body() != null) {
-            return response.body().getResult().getMrzData().getRawMrzString();
+            return response.body()
+                    .getResult()
+                    .getMrzData()
+                    .getRawMrzString();
         }
 
         throw Helper.microblinkException(response);

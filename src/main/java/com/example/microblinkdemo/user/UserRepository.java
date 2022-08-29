@@ -8,11 +8,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query(value = "SELECT u.* FROM LibraryLoan ll" +
-            " INNER JOIN userbook u on ll.userid = u.id" +
-            " WHERE ll.returndate is null AND EXTRACT(DAY FROM now() - ll.duedate) > 0" +
+    @Query(value = "SELECT u.* FROM library_loan ll" +
+            " INNER JOIN \"user\" u ON u.id = ll.user_id" +
+            " WHERE ll.return_date IS NULL AND" +
+            " EXTRACT(DAY FROM now() - ll.due_date) > 0" +
             " GROUP BY u.id" +
-            " ORDER BY SUM(EXTRACT(DAY FROM now() - ll.duedate)) DESC" +
-            " LIMIT 1", nativeQuery = true)
+            " ORDER BY SUM(EXTRACT(DAY FROM now() - ll.due_date))" +
+            " DESC LIMIT 1", nativeQuery = true)
     User findMostOverdue();
 }

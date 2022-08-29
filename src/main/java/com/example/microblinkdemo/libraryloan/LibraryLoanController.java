@@ -1,6 +1,6 @@
 package com.example.microblinkdemo.libraryloan;
 
-import com.example.microblinkdemo.libraryloan.domain.BookDueDate;
+import com.example.microblinkdemo.libraryloan.domain.LibraryLoanResponse;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanHistory;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanRequest;
 import com.example.microblinkdemo.util.Validator;
@@ -24,7 +24,7 @@ public class LibraryLoanController {
     }
 
     @PostMapping
-    public BookDueDate borrowBook(@RequestBody @Valid LibraryLoanRequest request, BindingResult result) {
+    public LibraryLoanResponse borrowBook(@RequestBody @Valid LibraryLoanRequest request, BindingResult result) {
         Validator.requestAndDuplicateBooks(result, request.getBookCopyIds());
         return libraryLoanService.borrowBook(request);
     }

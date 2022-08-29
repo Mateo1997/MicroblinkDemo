@@ -1,18 +1,17 @@
 package com.example.microblinkdemo.book;
 
 import com.example.microblinkdemo.bookcopy.domain.BookCopy;
-import com.example.microblinkdemo.util.TimestampEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
-//@Table(name = "\"Book\"")
+@Table(name = "\"book\"")
 @Entity
 @Getter
 @NoArgsConstructor
-public class Book extends TimestampEntity {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

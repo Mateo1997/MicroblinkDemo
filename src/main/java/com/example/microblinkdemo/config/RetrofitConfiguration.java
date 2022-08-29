@@ -1,6 +1,6 @@
 package com.example.microblinkdemo.config;
 
-import com.example.microblinkdemo.mrz.domain.MrtdProperties;
+import com.example.microblinkdemo.mrz.properties.MrtdProperties;
 import com.example.microblinkdemo.retrofit.MicroblinkAPI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

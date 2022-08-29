@@ -22,7 +22,7 @@ public class MrzService {
 
     public void parseMrzData(MrtdRequest request) {
         try {
-            log.info("REQUEST RECEIVED - process;");
+            log.info("REQUEST RECEIVED - parseMrzData;");
             String rawMrzString = retrofitHelper.getRawMrzString(request);
 
             final String[] mrzArray = splitByNewLine(rawMrzString);
@@ -43,9 +43,9 @@ public class MrzService {
 
             final Mrz mrz = mapMrzData(mrzFirstLine, mrzSecondLine, mrzThirdLine, isMrzValid);
             mrzRepository.save(mrz);
-            log.info("REQUEST SUCCESSFULLY PROCESSED - process;");
+            log.info("REQUEST SUCCESSFULLY PROCESSED - parseMrzData;");
         } catch (Exception e) {
-            log.error("REQUEST FAILED - process;", e);
+            log.error("REQUEST FAILED - parseMrzData;", e);
             ExceptionHandler.handleException(e);
         }
     }

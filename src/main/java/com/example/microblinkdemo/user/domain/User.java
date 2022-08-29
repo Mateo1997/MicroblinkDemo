@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Table(name = "UserBook")
+@Table(name = "\"user\"")
 @Entity
 @Getter
 @NoArgsConstructor
@@ -35,7 +35,7 @@ public class User extends TimestampEntity {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @OneToMany(mappedBy = "bookCopy")
+    @OneToMany(mappedBy = "user")
     private List<LibraryLoan> libraryLoans;
 
     public User(Integer id) {

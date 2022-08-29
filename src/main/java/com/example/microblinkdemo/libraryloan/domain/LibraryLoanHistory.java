@@ -15,9 +15,10 @@ import java.time.LocalDate;
 @Builder
 public class LibraryLoanHistory {
 
-    private UserDomain user;
-    private BookCopyDomain bookCopy;
+    private String number;
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
+    private UserDomain user;
+    private BookCopyDomain bookCopy;
 }

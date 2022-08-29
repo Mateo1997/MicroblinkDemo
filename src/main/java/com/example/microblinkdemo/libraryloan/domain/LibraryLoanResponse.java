@@ -7,7 +7,8 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class BookDueDate {
+public class LibraryLoanResponse {
 
+    private String loanNumber;
     private LocalDate dueDate;
 }
