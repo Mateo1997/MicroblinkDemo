@@ -1,7 +1,7 @@
 package com.example.microblinkdemo.bookcopy.domain;
 
 import com.example.microblinkdemo.book.Book;
-import com.example.microblinkdemo.libraryloanrecords.LibraryLoanRecord;
+import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,11 +21,11 @@ public class BookCopy {
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookId", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @OneToMany(mappedBy = "bookCopy")
-    private List<LibraryLoanRecord> libraryLoanRecords;
+    @ManyToMany(mappedBy = "bookCopy")
+    private List<LibraryLoan> libraryLoan;
 
     public BookCopy(Integer id) {
         this.id = id;

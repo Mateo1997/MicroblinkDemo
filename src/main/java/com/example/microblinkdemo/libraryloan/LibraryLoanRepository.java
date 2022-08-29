@@ -18,7 +18,6 @@ public interface LibraryLoanRepository extends JpaRepository<LibraryLoan, Long> 
             " DESC", nativeQuery = true)
     List<LibraryLoan> getHistoryByBookCopyId(@Param("bookCopyId") Integer bookCopyId);
 
-
     @Query(value = "SELECT TRUE FROM library_loan ll" +
             " INNER JOIN library_loan_record llr on llr.library_loan_id = ll.id" +
             " WHERE llr.book_copy_id = :bookCopyId" +

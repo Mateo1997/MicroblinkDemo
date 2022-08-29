@@ -1,12 +1,12 @@
 package com.example.microblinkdemo.libraryloan;
 
 import com.example.microblinkdemo.bookcopy.BookCopyService;
+import com.example.microblinkdemo.bookcopy.domain.BookCopy;
 import com.example.microblinkdemo.exception.MethodNotAllowedException;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanHistory;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanRequest;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanResponse;
-import com.example.microblinkdemo.libraryloanrecords.LibraryLoanRecord;
 import com.example.microblinkdemo.user.UserService;
 import com.example.microblinkdemo.util.ResponseConstants;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +32,16 @@ public class LibraryLoanService {
     }
 
     public LibraryLoanResponse borrowBook(LibraryLoanRequest request) {
-        List<LibraryLoanRecord> libraryLoanRecords = new ArrayList<>();
+        List<BookCopy> bookCopies = new ArrayList<>();
         userService.throwExceptionIfNotExists(request.getUserId());
 
         LibraryLoan libraryLoan = libraryLoanConverter.requestToEntity(request);
         for (Integer bookCopyId : request.getBookCopyIds()) {
             bookCopyService.throwExceptionIfNotExists(bookCopyId);
             throwExceptionIfBookIsBorrowed(bookCopyId);
-            libraryLoanRecords.add(libraryLoanConverter.getLibraryLoanRecord(libraryLoan, bookCopyId));
+            bookCopies.add(new BookCopy(bookCopyId));
         }
-        libraryLoan.setLibraryLoanRecords(libraryLoanRecords);
+        libraryLoan.setBookCopy(bookCopies);
 
         final LibraryLoan libraryLoanDTO = libraryLoanRepository.save(libraryLoan);
         return new LibraryLoanResponse(libraryLoanDTO.getNumber(), libraryLoanDTO.getDueDate());

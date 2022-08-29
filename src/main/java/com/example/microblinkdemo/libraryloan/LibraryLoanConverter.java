@@ -1,10 +1,8 @@
 package com.example.microblinkdemo.libraryloan;
 
-import com.example.microblinkdemo.bookcopy.domain.BookCopy;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanHistory;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanRequest;
-import com.example.microblinkdemo.libraryloanrecords.LibraryLoanRecord;
 import com.example.microblinkdemo.user.UserConverter;
 import com.example.microblinkdemo.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -31,15 +29,7 @@ public class LibraryLoanConverter {
                 .build();
     }
 
-    public LibraryLoanRecord getLibraryLoanRecord(LibraryLoan libraryLoan, Integer bookCopyId) {
-        return LibraryLoanRecord.builder()
-                .libraryLoan(libraryLoan)
-                .bookCopy(new BookCopy(bookCopyId))
-                .build();
-    }
-
     public LibraryLoanHistory entityToHistory(LibraryLoan libraryLoan) {
-        final BookCopy bookCopy = getBookCopy(libraryLoan);
         return LibraryLoanHistory.builder()
                 .user(userConverter.entityToDomain(libraryLoan.getUser()))
                 .number(libraryLoan.getNumber())
@@ -47,13 +37,5 @@ public class LibraryLoanConverter {
                 .dueDate(libraryLoan.getDueDate())
                 .returnDate(libraryLoan.getReturnDate())
                 .build();
-    }
-
-    private BookCopy getBookCopy(LibraryLoan libraryLoan) {
-        return libraryLoan.getLibraryLoanRecords()
-                .stream()
-                .findFirst()
-                .orElseGet(LibraryLoanRecord::new)
-                .getBookCopy();
     }
 }

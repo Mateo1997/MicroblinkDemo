@@ -1,6 +1,6 @@
 package com.example.microblinkdemo.libraryloan.domain;
 
-import com.example.microblinkdemo.libraryloanrecords.LibraryLoanRecord;
+import com.example.microblinkdemo.bookcopy.domain.BookCopy;
 import com.example.microblinkdemo.user.domain.User;
 import com.example.microblinkdemo.util.TimestampEntity;
 import lombok.*;
@@ -31,10 +31,14 @@ public class LibraryLoan extends TimestampEntity {
     private LocalDate returnDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Setter
-    @OneToMany(mappedBy = "libraryLoan", cascade = CascadeType.PERSIST)
-    private List<LibraryLoanRecord> libraryLoanRecords;
+    @ManyToMany
+    @JoinTable(name = "library_loan_record",
+            joinColumns = @JoinColumn(name = "library_loan_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_copy_id", referencedColumnName =  "id")
+    )
+    private List<BookCopy> bookCopy;
 }
