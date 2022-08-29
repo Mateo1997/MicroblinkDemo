@@ -1,4 +1,4 @@
-package com.example.microblinkdemo.mrz.domain;
+package com.example.microblinkdemo.mrz.extractor;
 
 import lombok.Getter;
 import lombok.Setter;

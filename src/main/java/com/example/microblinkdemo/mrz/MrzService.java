@@ -1,13 +1,16 @@
 package com.example.microblinkdemo.mrz;
 
-import com.example.microblinkdemo.mrz.domain.*;
+import com.example.microblinkdemo.mrz.domain.MrtdRequest;
+import com.example.microblinkdemo.mrz.domain.Mrz;
+import com.example.microblinkdemo.mrz.extractor.MrzFirstLine;
+import com.example.microblinkdemo.mrz.extractor.MrzSecondLine;
+import com.example.microblinkdemo.mrz.extractor.MrzThirdLine;
 import com.example.microblinkdemo.retrofit.RetrofitHelper;
 import com.example.microblinkdemo.util.ExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,12 +26,17 @@ public class MrzService {
     public void parseMrzData(MrtdRequest request) {
         try {
             log.info("REQUEST RECEIVED - parseMrzData;");
-            String rawMrzString = retrofitHelper.getRawMrzString(request);
-
+            final String rawMrzString = retrofitHelper.getRawMrzString(request);
             final String[] mrzArray = splitByNewLine(rawMrzString);
-            final MrzFirstLine mrzFirstLine = extractMRZFirstLine(mrzArray[0]);
-            final MrzSecondLine mrzSecondLine = extractMRZSecondLine(mrzArray[1]);
-            final MrzThirdLine mrzThirdLine = extractMRZThirdLine(mrzArray[2]);
+
+            MrzFirstLine mrzFirstLine = new MrzFirstLine();
+            mrzFirstLine.extract(mrzArray[0]);
+
+            MrzSecondLine mrzSecondLine = new MrzSecondLine();
+            mrzSecondLine.extract(mrzArray[1]);
+
+            MrzThirdLine mrzThirdLine = new MrzThirdLine();
+            mrzThirdLine.extract(mrzArray[2]);
 
             boolean isMrzValid = isCheckDigitValid(zeroValueFillers(mrzFirstLine.getDocumentNumber()), mrzFirstLine.getDocumentNumberCD()) &&
                     isCheckDigitValid(mrzSecondLine.getDateOfBirth(), mrzSecondLine.getDateOfBirthCD()) &&
@@ -54,69 +62,8 @@ public class MrzService {
         return rawMrzString.split("\n");
     }
 
-    private MrzFirstLine extractMRZFirstLine(String mrzFirstPart) {
-        MrzExtractor extractor = new MrzExtractor(mrzFirstPart);
-        final String documentCode = extractPart(extractor, MrzConstants.DOCUMENT_CODE_SIZE);
-        final String issuer = extractPart(extractor, MrzConstants.ISSUER_SIZE);
-        final String documentNumber = extractPart(extractor, MrzConstants.DOCUMENT_NUMBER_SIZE);
-        final String documentNumberCD = extractPart(extractor, MrzConstants.CHECK_DIGIT_SIZE);
-        final String optionalData = extractPart(extractor, MrzConstants.OPTIONAL_1_SIZE);
-
-        return MrzFirstLine.builder()
-                .documentCode(documentCode)
-                .issuer(issuer)
-                .documentNumber(documentNumber)
-                .documentNumberCD(documentNumberCD)
-                .optionalData(optionalData)
-                .build();
-    }
-
-    private MrzSecondLine extractMRZSecondLine(String mrzSecondPart) {
-        MrzExtractor extractor = new MrzExtractor(mrzSecondPart);
-        final String dateOfBirth = extractPart(extractor, MrzConstants.DATE_OF_BIRTH_SIZE);
-        final String dateOfBirthCD = extractPart(extractor, MrzConstants.CHECK_DIGIT_SIZE);
-        final String gender = extractPart(extractor, MrzConstants.GENDER_SIZE);
-        final String dateOfExpiry = extractPart(extractor, MrzConstants.DATE_OF_EXPIRY_SIZE);
-        final String dateOfExpiryCD = extractPart(extractor, MrzConstants.CHECK_DIGIT_SIZE);
-        final String nationality = extractPart(extractor, MrzConstants.NATIONALITY_SIZE);
-        final String optionalData = extractPart(extractor, MrzConstants.OPTIONAL_2_SIZE);
-        final String overallCD = extractPart(extractor, MrzConstants.CHECK_DIGIT_SIZE);
-
-        return MrzSecondLine.builder()
-                .dateOfBirth(dateOfBirth)
-                .dateOfBirthCD(dateOfBirthCD)
-                .gender(gender)
-                .dateOfExpiry(dateOfExpiry)
-                .dateOfExpiryCD(dateOfExpiryCD)
-                .nationality(nationality)
-                .optionalData(optionalData)
-                .overallCD(overallCD)
-                .build();
-    }
-
-    private MrzThirdLine extractMRZThirdLine(String mrzThirdPart) {
-        final String[] mrzThirdPartArray = mrzThirdPart.split(MrzConstants.DOUBLE_FILLER);
-        final String primaryId = getIdentifier(mrzThirdPartArray[0]);
-        final String secondaryId = getIdentifier(mrzThirdPartArray[1]);
-        return new MrzThirdLine(primaryId, secondaryId);
-    }
-
-    private String getIdentifier(String identifier) {
-        return String.join(MrzConstants.SPACE, splitBySingleFiller(identifier));
-    }
-
-    private List<String> splitBySingleFiller(String identifier) {
-        return Arrays.stream(identifier.split(MrzConstants.FILLER)).toList();
-    }
-
     private String zeroValueFillers(String text) {
         return text.replace(MrzConstants.FILLER, MrzConstants.ZERO);
-    }
-
-    private String extractPart(MrzExtractor extractor, Integer elementSize) {
-        final String extractPart = extractor.getMrzString().substring(0, elementSize);
-        extractor.setMrzString(extractor.getMrzString().substring(elementSize));
-        return extractPart;
     }
 
     private boolean isCheckDigitValid(String dataElement, String checkDigit) {
@@ -143,12 +90,16 @@ public class MrzService {
         return letter - 55;
     }
 
-    private Integer calculate(Integer numValue, Integer index) {
+    private int calculate(int numValue, int index) {
         return numValue * multipliers.get(modOfThree(index));
     }
 
-    private Integer modOfThree(Integer number) {
+    private int modOfThree(int number) {
         return number % 3;
+    }
+
+    private String removeFillers(String text) {
+        return text.replace(MrzConstants.FILLER, MrzConstants.EMPTY_STRING);
     }
 
     private Mrz mapMrzData(MrzFirstLine firstLine, MrzSecondLine secondLine, MrzThirdLine thirdLine, boolean isMrzValid) {
@@ -166,9 +117,5 @@ public class MrzService {
                 .secondaryId(thirdLine.getSecondaryId())
                 .valid(isMrzValid)
                 .build();
-    }
-
-    private String removeFillers(String text) {
-        return text.replace(MrzConstants.FILLER, MrzConstants.EMPTY_STRING);
     }
 }

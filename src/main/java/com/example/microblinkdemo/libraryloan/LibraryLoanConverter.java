@@ -1,6 +1,5 @@
 package com.example.microblinkdemo.libraryloan;
 
-import com.example.microblinkdemo.bookcopy.BookCopyConverter;
 import com.example.microblinkdemo.bookcopy.domain.BookCopy;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoan;
 import com.example.microblinkdemo.libraryloan.domain.LibraryLoanHistory;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LibraryLoanConverter {
 
-    private final BookCopyConverter bookCopyConverter;
     private final UserConverter userConverter;
 
     @Value("${library.check.out.book.days}")
@@ -43,7 +41,6 @@ public class LibraryLoanConverter {
     public LibraryLoanHistory entityToHistory(LibraryLoan libraryLoan) {
         final BookCopy bookCopy = getBookCopy(libraryLoan);
         return LibraryLoanHistory.builder()
-                .bookCopy(bookCopyConverter.entityToDomain(bookCopy))
                 .user(userConverter.entityToDomain(libraryLoan.getUser()))
                 .number(libraryLoan.getNumber())
                 .borrowDate(libraryLoan.getBorrowDate())

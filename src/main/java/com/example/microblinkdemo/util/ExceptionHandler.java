@@ -9,6 +9,10 @@ import static com.example.microblinkdemo.util.ResponseConstants.*;
 
 public class ExceptionHandler {
 
+    private ExceptionHandler() {
+        throw new IllegalStateException("ExceptionHandler class");
+    }
+
     public static void handleException(Exception e) {
             switch (e.getMessage()) {
                 case ERROR_MICROBLINK_BAD_REQUEST, ERROR_MICROBLINK_IMAGE_IS_NOT_VALID,

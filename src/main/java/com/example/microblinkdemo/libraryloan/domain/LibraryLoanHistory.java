@@ -1,6 +1,5 @@
 package com.example.microblinkdemo.libraryloan.domain;
 
-import com.example.microblinkdemo.bookcopy.domain.BookCopyDomain;
 import com.example.microblinkdemo.user.domain.UserDomain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +19,4 @@ public class LibraryLoanHistory {
     private LocalDate dueDate;
     private LocalDate returnDate;
     private UserDomain user;
-    private BookCopyDomain bookCopy;
 }
