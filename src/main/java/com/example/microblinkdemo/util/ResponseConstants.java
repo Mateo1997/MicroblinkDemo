@@ -10,7 +10,7 @@ public class ResponseConstants {
     public static final String ERROR_DUPLICATE_COPY_BOOKS_FOUND = "Duplicate copy book ids are found in collection";
     public static final String ERROR_USER_NOT_FOUND = "User not found";
     public static final String ERROR_BOOK_COPY_NOT_FOUND = "Copy of the book was not found";
-    public static final String ERROR_BOOK_ALREADY_BORROWED = "The book has been already borrowed";
+    public static final String ERROR_BOOK_COPY_ALREADY_BORROWED = "The book copy has been already borrowed";
     public static final String ERROR_INTERNAL_SERVER_ERROR = "Internal server error";
 
     //Microblink exceptions

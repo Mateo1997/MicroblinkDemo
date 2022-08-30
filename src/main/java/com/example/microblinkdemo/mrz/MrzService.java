@@ -66,6 +66,10 @@ public class MrzService {
         return text.replace(MrzConstants.FILLER, MrzConstants.ZERO);
     }
 
+    private String removeFillers(String text) {
+        return text.replace(MrzConstants.FILLER, MrzConstants.EMPTY_STRING);
+    }
+
     private boolean isCheckDigitValid(String dataElement, String checkDigit) {
         return Integer.valueOf(checkDigit).equals(remainder(dataElement));
     }
@@ -96,10 +100,6 @@ public class MrzService {
 
     private int modOfThree(int number) {
         return number % 3;
-    }
-
-    private String removeFillers(String text) {
-        return text.replace(MrzConstants.FILLER, MrzConstants.EMPTY_STRING);
     }
 
     private Mrz mapMrzData(MrzFirstLine firstLine, MrzSecondLine secondLine, MrzThirdLine thirdLine, boolean isMrzValid) {

@@ -50,6 +50,6 @@ public class LibraryLoanService {
     private void throwExceptionIfBookIsBorrowed(Integer bookCopyId) {
         final Boolean isBorrowed = libraryLoanRepository.isBookCopyBorrowed(bookCopyId);
         if (Boolean.TRUE.equals(isBorrowed))
-            throw new MethodNotAllowedException(ResponseConstants.ERROR_BOOK_ALREADY_BORROWED);
+            throw new MethodNotAllowedException(ResponseConstants.ERROR_BOOK_COPY_ALREADY_BORROWED);
     }
 }

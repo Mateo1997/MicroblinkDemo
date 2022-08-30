@@ -32,7 +32,7 @@ public class LibraryLoanConverter {
     public LibraryLoanHistory entityToHistory(LibraryLoan libraryLoan) {
         return LibraryLoanHistory.builder()
                 .user(userConverter.entityToDomain(libraryLoan.getUser()))
-                .number(libraryLoan.getNumber())
+                .loanNumber(libraryLoan.getNumber())
                 .borrowDate(libraryLoan.getBorrowDate())
                 .dueDate(libraryLoan.getDueDate())
                 .returnDate(libraryLoan.getReturnDate())

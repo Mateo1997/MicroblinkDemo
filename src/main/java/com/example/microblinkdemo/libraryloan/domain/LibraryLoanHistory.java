@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class LibraryLoanHistory {
 
-    private String number;
+    private String loanNumber;
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
