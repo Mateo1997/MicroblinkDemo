@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class UserDomain {
 
     private Integer id;
-    private String serialNumber;
+    private String cardNumber;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;

@@ -24,7 +24,7 @@ public class User extends TimestampEntity {
     private Integer id;
 
     @Column(nullable = false, unique = true, updatable = false)
-    private String serialNumber;
+    private String cardNumber;
 
     @Column(nullable = false)
     private String firstName;

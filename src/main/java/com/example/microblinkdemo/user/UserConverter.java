@@ -16,7 +16,7 @@ public class UserConverter {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(request.getDateOfBirth())
-                .serialNumber(UUID.randomUUID().toString())
+                .cardNumber(UUID.randomUUID().toString())
                 .build();
     }
 
@@ -32,7 +32,7 @@ public class UserConverter {
     public UserDomain entityToDomain(User user) {
         return UserDomain.builder()
                 .id(user.getId())
-                .serialNumber(user.getSerialNumber())
+                .cardNumber(user.getCardNumber())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .dateOfBirth(user.getDateOfBirth())
