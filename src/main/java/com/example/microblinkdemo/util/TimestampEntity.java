@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class TimestampEntity {
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime creationTime;
+
+    @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime modificationTime;
 }
